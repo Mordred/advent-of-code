@@ -1,0 +1,45 @@
+#!/bin/bash
+
+pass=true
+RED='\033[1;31m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+git fetch origin
+
+echo "Running Linters:"
+
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  XARGS_ARGS='-r'
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  XARGS_ARGS=''
+else
+  XARGS_ARGS=''
+fi
+
+# Run prettier check
+CHANGED=$(git --no-pager diff --name-only `git merge-base HEAD origin/main` | egrep "(\.(j|t)sx?$)" | xargs $XARGS_ARGS ls -d 2>/dev/null)
+if [ ! -z "$CHANGED" ]; then
+        prettier=$(./node_modules/.bin/prettier -c $CHANGED)
+        ret_code=$?
+        ./node_modules/.bin/prettier --write $CHANGED
+
+        # If it didn't pass, announce it failed and print the output
+        if [ $ret_code != 0 ]; then
+                printf "\n${RED}prettier failed:${NC}\n"
+                printf "$prettier\n"
+                pass=false
+        else
+                printf "${GREEN}prettier passed.${NC}\n"
+        fi
+fi
+
+# If there were no failures, it is good to commit
+if $pass; then
+        exit 0
+fi
+
+exit 1
+
+# Redirect output to stderr.
+exec 1>&2
