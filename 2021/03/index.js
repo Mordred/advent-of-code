@@ -1,13 +1,10 @@
 import fs from 'fs/promises';
 
-const transposeFn = (matrix) =>matrix[0].map((_, i) => matrix.map((r) => r[i]));
+const transposeFn = (matrix) => matrix[0].map((_, i) => matrix.map((r) => r[i]));
 const sumFn = (vals) => vals.reduce((acc, cur) => acc + cur, 0);
 
-
 async function run() {
-  const values = (await fs.readFile('./input.txt', 'utf-8'))
-    .trim()
-    .split('\n');
+  const values = (await fs.readFile('./input.txt', 'utf-8')).trim().split('\n');
 
   const matrix = values.map((v) => v.split('').map((v) => parseInt(v, 2)));
   const transpose = transposeFn(matrix);
@@ -27,7 +24,7 @@ async function run() {
   let index = 0;
   while (O2.length > 1) {
     const sum = sumFn(O2.map((row) => parseInt(row[index], 2)));
-    O2 = O2.filter((b) => b[index] === (sum >= O2.length - sum ? '1' : '0'))
+    O2 = O2.filter((b) => b[index] === (sum >= O2.length - sum ? '1' : '0'));
     index++;
   }
 
@@ -35,7 +32,7 @@ async function run() {
   index = 0;
   while (CO2.length > 1) {
     const sum = sumFn(CO2.map((row) => parseInt(row[index], 2)));
-    CO2 = CO2.filter((b) => b[index] === (sum >= CO2.length - sum ? '0' : '1'))
+    CO2 = CO2.filter((b) => b[index] === (sum >= CO2.length - sum ? '0' : '1'));
     index++;
   }
 
