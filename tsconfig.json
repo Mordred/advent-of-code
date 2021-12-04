@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "esnext",
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "noErrorTruncation": true,
+    "esModuleInterop": true
+  }
+}
