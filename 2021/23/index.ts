@@ -1,5 +1,8 @@
 type Positions = [string, string];
 type State = Record<'A' | 'B' | 'C' | 'D', Positions>;
+type PathCache = Map<string, null | string[]>;
+type TraverseResult = [number, [State, number][]];
+type ResultCache = Map<string, TraverseResult>;
 
 const COSTS = {
   A: 1,
@@ -8,18 +11,11 @@ const COSTS = {
   D: 1000,
 };
 
-const crossroads = {
+const CROSSROADS = {
   A: 3,
   B: 5,
   C: 7,
   D: 9,
-};
-
-const part1TestStart: State = {
-  A: ['A2', 'D2'].sort() as Positions,
-  B: ['A1', 'C1'].sort() as Positions,
-  C: ['B1', 'C2'].sort() as Positions,
-  D: ['B2', 'D1'].sort() as Positions,
 };
 
 const part1ProdStart: State = {
@@ -27,13 +23,6 @@ const part1ProdStart: State = {
   B: ['C1', 'C2'].sort() as Positions,
   C: ['A2', 'D2'].sort() as Positions,
   D: ['A1', 'B1'].sort() as Positions,
-};
-
-const part2TestStart: State = {
-  A: ['A4', 'D4', 'D2', 'C3'].sort() as Positions,
-  B: ['A1', 'C1', 'C2', 'B3'].sort() as Positions,
-  C: ['B1', 'C4', 'B2', 'D3'].sort() as Positions,
-  D: ['B4', 'D1', 'A2', 'A3'].sort() as Positions,
 };
 
 const part2ProdStart: State = {
@@ -44,19 +33,10 @@ const part2ProdStart: State = {
 };
 
 function isFinal(state: State): Boolean {
-  return (
-    state.A.includes('A1') &&
-    state.A.includes('A2') &&
-    state.B.includes('B1') &&
-    state.B.includes('B2') &&
-    state.C.includes('C1') &&
-    state.C.includes('C2') &&
-    state.D.includes('D1') &&
-    state.D.includes('D2')
-  );
+  return Object.keys(state).every((r) => state[r].every((p, i) => p[0] === r && p[1] === (i + 1).toString()));
 }
 
-function path(cache: Map<string, null | string[]>, start: string, end: string): null | string[] {
+function path(cache: PathCache, start: string, end: string): null | string[] {
   const cacheKey = `${start}-${end}`;
   if (cache.has(cacheKey)) {
     return cache.get(cacheKey);
@@ -67,7 +47,7 @@ function path(cache: Map<string, null | string[]>, start: string, end: string): 
   const e = parseInt(end.slice(1), 10);
   if (start[0] === 'H') {
     // From hall to room
-    const c = crossroads[end[0]];
+    const c = CROSSROADS[end[0]];
     if (s <= c) {
       for (let i = s + 1; i <= c; i++) {
         result.push(`H${i.toString().padStart(2, '0')}`);
@@ -86,7 +66,7 @@ function path(cache: Map<string, null | string[]>, start: string, end: string): 
       result.push(`${start[0]}${i}`);
     }
 
-    const c = crossroads[start[0]];
+    const c = CROSSROADS[start[0]];
     if (e <= c) {
       for (let i = c; i >= e; i--) {
         result.push(`H${i.toString().padStart(2, '0')}`);
@@ -102,25 +82,17 @@ function path(cache: Map<string, null | string[]>, start: string, end: string): 
   return result;
 }
 
-function pathNotBlocked(used: Record<string, 'A' | 'B' | 'C' | 'D'>, path: string[]) {
-  for (const s of path) {
-    if (used[s]) {
-      return false;
-    }
-  }
-
-  return true;
+function pathIsNotBlocked(used: Record<string, 'A' | 'B' | 'C' | 'D'>, path: string[]) {
+  return path.every((p) => !used[p]);
 }
 
-function* move(state: State, pathCache: Map<string, null | string[]>): Generator<[State, number, string]> {
+function* movements(state: State, pathCache: PathCache): Generator<[State, number, string]> {
   if (isFinal(state)) {
     return [state, 0];
   }
 
   const used = Object.keys(state).reduce((acc, cur) => {
-    for (const pos of state[cur]) {
-      acc[pos] = cur;
-    }
+    state[cur].forEach((p) => (acc[p] = cur));
     return acc;
   }, {});
   const roomCount: Record<'A' | 'B' | 'C' | 'D', number> = Object.keys(used).reduce(
@@ -155,10 +127,10 @@ function* move(state: State, pathCache: Map<string, null | string[]>): Generator
       if (pos[0] === 'H') {
         // Move to room
         if (roomCount[item] === 0) {
-          // Room is empty
+          // Room is empty or contains only `item` amphipods
           const dest = `${item}${missing}`;
           const p = path(pathCache, pos, dest);
-          if (pathNotBlocked(used, p)) {
+          if (pathIsNotBlocked(used, p)) {
             yield [
               {
                 ...state,
@@ -174,10 +146,10 @@ function* move(state: State, pathCache: Map<string, null | string[]>): Generator
         }
       } else {
         // Move to hall
-        const s = crossroads[pos[0]];
-        // Move to right
+        const s = CROSSROADS[pos[0]];
+        // Move to right from crossroad
         for (let i = s + 1; i <= 11; i++) {
-          if (crossroads[item] !== i && (i === 3 || i === 5 || i === 7 || i === 9)) {
+          if (CROSSROADS[item] !== i && (i === 3 || i === 5 || i === 7 || i === 9)) {
             continue;
           }
           const dest = `H${i.toString().padStart(2, '0')}`;
@@ -186,7 +158,7 @@ function* move(state: State, pathCache: Map<string, null | string[]>): Generator
           }
 
           const p = path(pathCache, pos, dest);
-          if (pathNotBlocked(used, p)) {
+          if (pathIsNotBlocked(used, p)) {
             yield [
               {
                 ...state,
@@ -201,9 +173,9 @@ function* move(state: State, pathCache: Map<string, null | string[]>): Generator
           }
         }
 
-        // Move to left
+        // Move to left from crossroad
         for (let i = s - 1; i >= 1; i--) {
-          if (crossroads[item] !== i && (i === 3 || i === 5 || i === 7 || i === 9)) {
+          if (CROSSROADS[item] !== i && (i === 3 || i === 5 || i === 7 || i === 9)) {
             continue;
           }
 
@@ -213,7 +185,7 @@ function* move(state: State, pathCache: Map<string, null | string[]>): Generator
           }
 
           const p = path(pathCache, pos, dest);
-          if (pathNotBlocked(used, p)) {
+          if (pathIsNotBlocked(used, p)) {
             yield [
               {
                 ...state,
@@ -232,44 +204,17 @@ function* move(state: State, pathCache: Map<string, null | string[]>): Generator
   }
 }
 
-type Result = { min: number; cache: Map<string, number>; states: [State, number][] };
-
 const key = (s: State) =>
   Object.keys(s)
     .sort()
     .reduce((acc, cur) => [...acc, `${cur}:${s[cur].join(',')}`], [])
     .join('-');
 
-function visualize(state: State) {
-  console.log('#'.repeat(13));
-  const used = Object.keys(state).reduce((acc, cur) => {
-    for (const pos of state[cur]) {
-      acc[pos] = cur;
-    }
-    return acc;
-  }, {});
-
-  let hall = '#';
-  for (let i = 0; i < 11; i++) {
-    const k = `H${(i + 1).toString().padStart(2, '0')}`;
-    hall += used[k] ?? '.';
-  }
-  console.log(hall + '#');
-  console.log(`###${used['A1'] ?? '.'}#${used['B1'] ?? '.'}#${used['C1'] ?? '.'}#${used['D1'] ?? '.'}###`);
-  for (let i = 2; i <= state.A.length; i++) {
-    console.log(
-      `  #${used[`A${i}`] ?? '.'}#${used[`B${i}`] ?? '.'}#${used[`C${i}`] ?? '.'}#${used[`D${i}`] ?? '.'}#  `,
-    );
-  }
-  console.log(`  #########  `);
-}
-
-type TraverseResult = [number, [State, number][]];
 function traverse(
   state: State,
   states: [State, number][],
-  resultCache: Map<string, TraverseResult>,
-  pathCache: Map<string, null | string[]>,
+  resultCache: ResultCache,
+  pathCache: PathCache,
 ): TraverseResult {
   const k = key(state);
 
@@ -282,7 +227,7 @@ function traverse(
   }
 
   const result: TraverseResult = [Infinity, []];
-  for (const [moveState, moveCost] of move(state, pathCache)) {
+  for (const [moveState, moveCost] of movements(state, pathCache)) {
     const [subCost, subStates] = traverse(moveState, [...states, [moveState, moveCost]], resultCache, pathCache);
 
     if (result[0] > subCost + moveCost) {
@@ -297,24 +242,9 @@ function traverse(
 
 async function run() {
   const part1 = traverse(part1ProdStart, [[part1ProdStart, 0]], new Map(), new Map());
-  let sum = 0;
-  for (const [state, cost] of part1[1]) {
-    sum += cost;
-    console.log(sum);
-    visualize(state);
-    console.log('');
-  }
+  console.log('Part 1:', part1[0]);
 
   const part2 = traverse(part2ProdStart, [[part2ProdStart, 0]], new Map(), new Map());
-  sum = 0;
-  for (const [state, cost] of part2[1]) {
-    sum += cost;
-    console.log(sum);
-    visualize(state);
-    console.log('');
-  }
-
-  console.log('Part 1:', part1[0]);
   console.log('Part 2:', part2[0]);
 }
 
