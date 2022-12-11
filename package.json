@@ -19,6 +19,7 @@
     "typescript": "4.9.3"
   },
   "dependencies": {
-    "colors": "1.4.0"
+    "colors": "1.4.0",
+    "mathjs": "11.5.0"
   }
 }
