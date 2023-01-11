@@ -1,4 +1,5 @@
 import fs from 'fs/promises';
+import { toInt } from '#aoc/utils.js';
 
 interface Tunels {
   [valve: string]: {
@@ -19,7 +20,6 @@ interface State {
   left: number;
 }
 
-const toInt = (s: string) => parseInt(s, 10);
 const cost = (timeCosts: TimeCost, a: string, b: string) => timeCosts[a < b ? a + b : b + a] ?? Infinity;
 
 function simulate(state: State) {

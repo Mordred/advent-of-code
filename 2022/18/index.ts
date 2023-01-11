@@ -1,11 +1,11 @@
 import fs from 'fs/promises';
+import { toInt } from '#aoc/utils.js';
 
 type Point = [number, number, number];
 interface Points {
   [pointString: string]: Point;
 }
 
-const toInt = (v: string) => parseInt(v, 10);
 const pointToString = (point: Point) => point.join(',');
 
 const UNBOUND = 5_000;

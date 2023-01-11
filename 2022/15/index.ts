@@ -1,4 +1,5 @@
 import fs from 'fs/promises';
+import { toInt } from '#aoc/utils.js';
 
 type Coords = [number, number];
 type IntervalWithY = [number, number, number];
@@ -10,8 +11,6 @@ interface Data {
 
 const MAX = 4000000;
 const MIN = 0;
-
-const toInt = (s: string) => parseInt(s, 10);
 
 function* area([x, y]: Coords, distance: number): Generator<IntervalWithY> {
   for (let i = 0; i <= distance; i++) {

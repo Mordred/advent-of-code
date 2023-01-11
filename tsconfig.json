@@ -5,6 +5,9 @@
     "noImplicitAny": false,
     "moduleResolution": "node",
     "noErrorTruncation": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "#aoc/*": [ "./*"]
+    }
   }
 }

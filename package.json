@@ -6,6 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "imports": {
+    "#aoc/*": "./*"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -19,6 +22,7 @@
     "typescript": "4.9.3"
   },
   "dependencies": {
+    "chalk": "5.2.0",
     "colors": "1.4.0",
     "mathjs": "11.5.0"
   }

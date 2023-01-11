@@ -1,6 +1,5 @@
 import fs from 'fs/promises';
-
-const sum = (a: number[]) => a.reduce((cur, acc) => acc + cur, 0)
+import { sum } from '#aoc/utils.js'
 
 enum Mode {
   COMMAND,
