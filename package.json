@@ -24,6 +24,6 @@
   "dependencies": {
     "chalk": "5.2.0",
     "colors": "1.4.0",
-    "mathjs": "11.5.0"
+    "mathjs": "12.1.0"
   }
 }
