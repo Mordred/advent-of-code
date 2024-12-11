@@ -16,4 +16,12 @@ export function hashCode(v: string) {
   return hash;
 }
 
+export function counts(arr: string[] | number[]): Record<string, number> {
+  return arr.reduce((acc, cur) => {
+    acc[cur] ??= 0;
+    acc[cur]++;
+    return acc;
+  }, {} as Record<string, number>);
+}
+
 export const IS_DEBUG = process.argv.includes('--debug');
