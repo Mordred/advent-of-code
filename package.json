@@ -19,6 +19,7 @@
     "husky": "9.1.7",
     "prettier": "3.4.1",
     "ts-node": "10.9.2",
+    "tsx": "4.19.2",
     "typescript": "5.7.2"
   },
   "dependencies": {
