@@ -17,11 +17,25 @@ export function hashCode(v: string) {
 }
 
 export function counts(arr: string[] | number[]): Record<string, number> {
-  return arr.reduce((acc, cur) => {
-    acc[cur] ??= 0;
-    acc[cur]++;
-    return acc;
-  }, {} as Record<string, number>);
+  return arr.reduce(
+    (acc, cur) => {
+      acc[cur] ??= 0;
+      acc[cur]++;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 }
 
-export const IS_DEBUG = process.argv.includes('--debug');
+export const IS_DEBUG = process.argv.includes("--debug");
+
+// floor division
+// a = (a // b) * b + (a % b)
+export function intDivide(dividend: number, divisor: number): number {
+  return Math.floor(dividend / divisor);
+}
+
+// modulo that handles negative numbers correctly
+export function mod(n: number, m: number): number {
+  return ((n % m) + m) % m;
+}
