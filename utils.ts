@@ -39,3 +39,34 @@ export function intDivide(dividend: number, divisor: number): number {
 export function mod(n: number, m: number): number {
   return ((n % m) + m) % m;
 }
+
+export type Coords = [number, number];
+
+export function* neighborhood<T>(grid: T[][], x: number, y: number): Generator<Coords> {
+  for (let i = -1; i <= 1; i++) {
+    for (let j = -1; j <= 1; j++) {
+      if (i === 0 && j === 0) {
+        continue;
+      }
+      const y2 = y + i;
+      const x2 = x + j;
+
+      if (y2 >= grid.length || y2 < 0) {
+        continue;
+      }
+
+      if (x2 >= grid[y2].length || x2 < 0) {
+        continue;
+      }
+
+      yield [x2, y2];
+    }
+  }
+}
+
+export function printGrid<T>(grid: T[][]): void {
+  for (const row of grid) {
+    console.log(row.join(''));
+  }
+  console.log('')
+}
