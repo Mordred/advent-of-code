@@ -70,3 +70,21 @@ export function printGrid<T>(grid: T[][]): void {
   }
   console.log('')
 }
+
+export type Range = [number, number];
+
+export function isOverlapping(a: Range, b: Range): boolean {
+  return a[0] <= b[1] && a[1] >= b[0];
+}
+
+export function mergeRanges(intervals: Range[]) {
+  return intervals.reduce((acc, cur) => {
+    const overlaps = acc
+      .filter((a) => isOverlapping(a, [cur[0], cur[1]]))
+      .concat([cur[0], cur[1]])
+      .flat();
+    return acc
+      .filter((a) => !isOverlapping(a, [cur[0], cur[1]]))
+      .concat([[Math.min(...overlaps), Math.max(...overlaps)]]);
+  }, [] as Range[])
+}
