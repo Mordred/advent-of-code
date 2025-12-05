@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { toInt } from '#aoc/utils.js';
+import { toInt } from '#aoc/utils.ts';
 import { sum } from 'mathjs';
 
 const CARDS = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];

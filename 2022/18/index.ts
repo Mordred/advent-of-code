@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { toInt } from '#aoc/utils.js';
+import { toInt } from '#aoc/utils.ts';
 
 type Point = [number, number, number];
 interface Points {

@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { toInt } from '#aoc/utils.js';
+import { toInt } from '#aoc/utils.ts';
 
 function isSafe1(data: number[]): boolean {
   const ascending = data[0] <= data.at(-1) ? data : data.toReversed();

@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { toInt, intDivide, mod } from '#aoc/utils.js';
+import { toInt, intDivide, mod } from '#aoc/utils.ts';
 
 const MOD = 100;
 

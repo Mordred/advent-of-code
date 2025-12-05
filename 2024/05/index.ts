@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { toInt } from '#aoc/utils.js';
+import { toInt } from '#aoc/utils.ts';
 
 function isCorrect(rules: Record<string, boolean>, update: number[]) {
   for (let i = 0; i < update.length; i++) {

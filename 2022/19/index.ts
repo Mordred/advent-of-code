@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import { performance } from 'node:perf_hooks';
 import chalk from 'chalk';
-import { sum, toInt, hashCode, IS_DEBUG } from '#aoc/utils.js'
+import { sum, toInt, hashCode, IS_DEBUG } from '#aoc/utils.ts'
 
 interface Price {
   ore: number;

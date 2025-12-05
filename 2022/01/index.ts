@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { sum } from '#aoc/utils.js'
+import { sum } from '#aoc/utils.ts'
 
 async function run() {
   const raw = (await fs.readFile(process.argv[2], 'utf-8')).trim();

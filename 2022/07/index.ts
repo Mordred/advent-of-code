@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { sum } from '#aoc/utils.js'
+import { sum } from '#aoc/utils.ts'
 
 enum Mode {
   COMMAND,

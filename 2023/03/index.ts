@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { toInt, sum } from '#aoc/utils.js';
+import { toInt, sum } from '#aoc/utils.ts';
 import { prod } from 'mathjs';
 
 type Coords = [number, number];

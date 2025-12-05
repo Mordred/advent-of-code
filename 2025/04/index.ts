@@ -1,4 +1,4 @@
-import { Coords, neighborhood, printGrid } from '#aoc/utils.js';
+import { type Coords, neighborhood } from '#aoc/utils.ts';
 import fs from 'fs/promises';
 
 type Grid = string[][];

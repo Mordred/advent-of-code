@@ -1,4 +1,4 @@
-import { sum, toInt } from '#aoc/utils.js';
+import { sum, toInt } from '#aoc/utils.ts';
 import fs from 'fs/promises';
 
 type Coords = [number, number];

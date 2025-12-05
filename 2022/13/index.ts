@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { sum } from '#aoc/utils.js'
+import { sum } from '#aoc/utils.ts'
 
 type Left = number | number[] | Left[]
 type Right = number | number[] | Right[]

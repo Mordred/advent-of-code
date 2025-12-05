@@ -1,3 +1,4 @@
+import { isOverlapping } from '#aoc/utils.ts';
 import fs from 'fs/promises';
 
 const toInt = (v: string) => parseInt(v, 10);
@@ -5,11 +6,7 @@ const toInt = (v: string) => parseInt(v, 10);
 type Cube = [[number, number], [number, number], [number, number]];
 type Step = [boolean, Cube];
 
-function isOverlapping(a: [number, number], b: [number, number]): boolean {
-  return a[0] <= b[1] && a[1] >= b[0];
-}
-
-function intersection(a: Cube, b: Cube): Cube {
+function intersection(a: Cube, b: Cube): Cube | null {
   if (isOverlapping(a[0], b[0]) && isOverlapping(a[1], b[1]) && isOverlapping(a[2], b[2])) {
     return [
       [Math.max(a[0][0], b[0][0]), Math.min(a[0][1], b[0][1])],

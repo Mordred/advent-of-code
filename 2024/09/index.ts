@@ -1,4 +1,4 @@
-import { toInt, sum } from '#aoc/utils.js';
+import { toInt, sum } from '#aoc/utils.ts';
 import fs from 'fs/promises';
 
 interface File {

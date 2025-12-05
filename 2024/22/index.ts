@@ -1,4 +1,4 @@
-import { toInt } from '#aoc/utils.js';
+import { toInt } from '#aoc/utils.ts';
 import fs from 'fs/promises';
 
 function mix(a: number, b: number): number {

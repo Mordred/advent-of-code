@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { sum } from '#aoc/utils.js'
+import { sum } from '#aoc/utils.ts'
 
 const chunks = <T>(a: T[], size: number): T[][] =>
   Array.from(new Array(Math.ceil(a.length / size)), (_, i) => a.slice(i * size, i * size + size));

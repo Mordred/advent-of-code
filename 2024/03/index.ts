@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { toInt } from '#aoc/utils.js';
+import { toInt } from '#aoc/utils.ts';
 
 function part1(data: string): number {
   const RE = /mul\((\d+),(\d+)\)/g;

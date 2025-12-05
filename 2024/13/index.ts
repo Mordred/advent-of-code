@@ -1,4 +1,4 @@
-import { toInt } from '#aoc/utils.js';
+import { toInt } from '#aoc/utils.ts';
 import fs from 'fs/promises';
 
 const round = (n: number, digits: number) => Math.round(n * 10 ** digits) / 10 ** digits;

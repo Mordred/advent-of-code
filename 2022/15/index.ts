@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { toInt } from '#aoc/utils.js';
+import { mergeRanges, toInt } from '#aoc/utils.ts';
 
 type Coords = [number, number];
 type IntervalWithY = [number, number, number];
@@ -21,24 +21,8 @@ function* area([x, y]: Coords, distance: number): Generator<IntervalWithY> {
   }
 }
 
-function isOverlapping(a: [number, number], b: [number, number]): boolean {
-  return a[0] <= b[1] && a[1] >= b[0];
-}
-
 function inRange(num: number, min: number, max: number) {
   return Math.min(Math.max(num, min), max);
-}
-
-function merge(intervals: Interval[]) {
-  return intervals.reduce((acc, cur) => {
-    const overlaps = acc
-      .filter((a) => isOverlapping(a, [cur[0], cur[1]]))
-      .concat([cur[0], cur[1]])
-      .flat();
-    return acc
-      .filter((a) => !isOverlapping(a, [cur[0], cur[1]]))
-      .concat([[Math.min(...overlaps), Math.max(...overlaps)]]);
-  }, [])
 }
 
 async function run() {
@@ -68,10 +52,10 @@ async function run() {
     }
   }
 
-  console.log('Part 1', merge(part1Intervals).reduce((acc, cur) => acc + (cur[1] - cur[0]), 0));
+  console.log('Part 1', mergeRanges(part1Intervals).reduce((acc, cur) => acc + (cur[1] - cur[0]), 0));
 
   for (let i = 0; i <= 4000000; i++) {
-    const intervals = merge(part2Grid[i])
+    const intervals = mergeRanges(part2Grid[i])
     // What if multiple points found?
     if (intervals.length > 1) {
       console.log('Part 2', (intervals[0][1] + 1) * 4000000 + i);
