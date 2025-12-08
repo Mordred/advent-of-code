@@ -88,3 +88,7 @@ export function mergeRanges(intervals: Range[]) {
       .concat([[Math.min(...overlaps), Math.max(...overlaps)]]);
   }, [] as Range[])
 }
+
+export function transpose<T>(grid: T[][]): T[][] {
+  return grid[0].map((_, i) => grid.map((row) => row[i]));
+}
