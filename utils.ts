@@ -1,5 +1,7 @@
 export const sum = (a: number[]) => a.reduce((cur, acc) => acc + cur, 0);
 
+export const product = (a: number[]) => a.reduce((cur, acc) => acc * cur, 1);
+
 export const toInt = (v: string) => parseInt(v, 10);
 
 export function hashCode(v: string) {
